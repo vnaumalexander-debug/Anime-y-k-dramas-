@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anime, K-Dramas y Calculadora</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    background:#111;
+    color:white;
+    margin:0;
+}
+
+#menu{
+    margin-top:30px;
+}
+
+.opcion{
+    display:inline-block;
+    margin:20px;
+    cursor:pointer;
+}
+
+.opcion img{
+    width:180px;
+    height:180px;
+    object-fit:cover;
+    border-radius:15px;
+    transition:.3s;
+}
+
+.opcion img:hover{
+    transform:scale(1.08);
+}
+
+.seccion{
+    display:none;
+    margin-top:40px;
+}
+
+.seccion img{
+    width:300px;
+    border-radius:15px;
+}
+
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:purple;
+    color:white;
+    cursor:pointer;
+    margin:5px;
+}
+
+button:hover{
+    background:#b000ff;
+}
+
+input, textarea{
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    margin:5px;
+}
+
+textarea{
+    width:300px;
+    height:100px;
+}
+
+a{
+    color:cyan;
+}
+
+#info{
+    color:gold;
+    margin:15px;
+}
+</style>
+
+<script>
+
+window.onload = function(){
+
+    let visitas = localStorage.getItem("visitas") || 0;
+    visitas++;
+
+    localStorage.setItem("visitas", visitas);
+
+    document.getElementById("info").innerHTML =
+    "👥 Visitas: " + visitas;
+
+    mostrarComentarios();
+
+    setTimeout(()=>{
+        alert("✨ Bienvenido a Anime y K-Dramas ✨");
+    },500);
+};
+
+function ver(x){
+
+    document.getElementById("menu").style.display =
+    (x===0) ? "block" : "none";
+
+    document.getElementById("anime").style.display =
+    (x===1) ? "block" : "none";
+
+    document.getElementById("kdrama").style.display =
+    (x===2) ? "block" : "none";
+
+    document.getElementById("calculadora").style.display =
+    (x===3) ? "block" : "none";
+}
+
+function animeInfo(){
+    alert("🎌 Bienvenido a Anime");
+    ver(1);
+}
+
+function kdramaInfo(){
+    alert("🎬 Bienvenido a K-Dramas");
+    ver(2);
+}
+
+function calculadoraInfo(){
+    alert("🧮 Calculadora");
+    ver(3);
+}
+
+function mostrarHora(){
+
+    let fecha = new Date();
+
+    alert(
+        "📅 " +
+        fecha.toLocaleString()
+    );
+}
+
+function saludar(){
+
+    let nombre = prompt("¿Cómo te llamas?");
+
+    if(nombre){
+        alert("👋 Hola " + nombre);
+    }
+}
+
+function recomendarAnime(){
+
+    let lista = [
+        "Naruto",
+        "One Piece",
+        "Demon Slayer",
+        "Attack on Titan",
+        "Jujutsu Kaisen"
+    ];
+
+    let elegido =
+    lista[Math.floor(Math.random()*lista.length)];
+
+    alert("⭐ Anime recomendado: " + elegido);
+}
+
+function recomendarKdrama(){
+
+    let lista = [
+        "Goblin",
+        "True Beauty",
+        "Vincenzo",
+        "Business Proposal",
+        "Crash Landing on You"
+    ];
+
+    let elegido =
+    lista[Math.floor(Math.random()*lista.length)];
+
+    alert("⭐ K-Drama recomendado: " + elegido);
+}
+
+let acumulado = 0;
+
+function calcular(op){
+
+    let n1 =
+    parseFloat(document.getElementById("n1").value);
+
+    let n2 =
+    parseFloat(document.getElementById("n2").value);
+
+    if(isNaN(n1) || isNaN(n2)){
+        alert("Ingresa números válidos");
+        return;
+    }
+
+    let r = 0;
+
+    if(op==="+") r = n1+n2;
+    if(op==="-" ) r = n1-n2;
+    if(op==="*") r = n1*n2;
+    if(op==="/") r = n1/n2;
+
+    acumulado += r;
+
+    document.getElementById("resultado").innerHTML =
+    "Resultado: " + r;
+
+    document.getElementById("acumulado").innerHTML =
+    "Acumulado: " + acumulado;
+}
+
+function reiniciar(){
+
+    acumulado = 0;
+
+    document.getElementById("resultado").innerHTML =
+    "Resultado: 0";
+
+    document.getElementById("acumulado").innerHTML =
+    "Acumulado: 0";
+}
+
+function guardarComentario(){
+
+    let comentario =
+    document.getElementById("comentario").value;
+
+    if(comentario.trim()===""){
+        alert("Escribe un comentario");
+        return;
+    }
+
+    let comentarios =
+    JSON.parse(localStorage.getItem("comentarios")) || [];
+
+    comentarios.push(comentario);
+
+    localStorage.setItem(
+        "comentarios",
+        JSON.stringify(comentarios)
+    );
+
+    document.getElementById("comentario").value="";
+
+    mostrarComentarios();
+
+    alert("✅ Comentario guardado");
+}
+
+function mostrarComentarios(){
+
+    let comentarios =
+    JSON.parse(localStorage.getItem("comentarios")) || [];
+
+    let html = "";
+
+    comentarios.forEach(c=>{
+        html += "<p>💬 "+c+"</p>";
+    });
+
+    document.getElementById("listaComentarios").innerHTML =
+    html;
+}
+</script>
+</head>
+
+<body>
+
+<div id="menu">
+
+<h1>🌟 Anime y K-Dramas 🌟</h1>
+
+<div id="info"></div>
+
+<button onclick="mostrarHora()">
+📅 Fecha y Hora
+</button>
+
+<button onclick="saludar()">
+👋 Saludar
+</button>
+
+<h2>💬 Comentarios</h2>
+
+<textarea
+id="comentario"
+placeholder="Escribe tu comentario">
+</textarea>
+
+<br>
+
+<button onclick="guardarComentario()">
+📩 Guardar Comentario
+</button>
+
+<div id="listaComentarios"></div>
+
+<br>
+
+<div class="opcion" onclick="animeInfo()">
+<img src="https://picsum.photos/200?anime">
+<p>🎌 Anime</p>
+</div>
+
+<div class="opcion" onclick="kdramaInfo()">
+<img src="https://picsum.photos/200?kdrama">
+<p>🎬 K-Dramas</p>
+</div>
+
+<div class="opcion" onclick="calculadoraInfo()">
+<img src="https://picsum.photos/200?calculator">
+<p>🧮 Calculadora</p>
+</div>
+
+</div>
+
+<div id="anime" class="seccion">
+
+<h1>🎌 Anime</h1>
+
+<img src="https://picsum.photos/300?anime">
+
+<p>Descubre las mejores series japonesas.</p>
+
+<button onclick="recomendarAnime()">
+⭐ Recomendar Anime
+</button>
+
+<br><br>
+
+<a href="https://www.google.com/search?q=anime" target="_blank">
+Buscar Anime
+</a>
+
+<br><br>
+
+<button onclick="ver(0)">
+⬅ Volver
+</button>
+
+</div>
+
+<div id="kdrama" class="seccion">
+
+<h1>🎬 K-Dramas</h1>
+
+<img src="https://picsum.photos/300?kdrama">
+
+<p>Explora los dramas coreanos.</p>
+
+<button onclick="recomendarKdrama()">
+⭐ Recomendar K-Drama
+</button>
+
+<br><br>
+
+<a href="https://www.google.com/search?q=kdramas" target="_blank">
+Buscar K-Dramas
+</a>
+
+<br><br>
+
+<button onclick="ver(0)">
+⬅ Volver
+</button>
+
+</div>
+
+<div id="calculadora" class="seccion">
+
+<h1>🧮 Calculadora Acumuladora</h1>
+
+<input type="number" id="n1" placeholder="Número 1">
+
+<br>
+
+<input type="number" id="n2" placeholder="Número 2">
+
+<br><br>
+
+<button onclick="calcular('+')">➕</button>
+<button onclick="calcular('-')">➖</button>
+<button onclick="calcular('*')">✖</button>
+<button onclick="calcular('/')">➗</button>
+
+<h2 id="resultado">Resultado: 0</h2>
+
+<h2 id="acumulado">Acumulado: 0</h2>
+
+<button onclick="reiniciar()">
+🔄 Reiniciar
+</button>
+
+<br><br>
+
+<button onclick="ver(0)">
+⬅ Volver
+</button>
+
+</div>
+
+</body>
+</html>
